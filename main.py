@@ -5,6 +5,7 @@ import tensorflow as tf
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from contextlib import asynccontextmanager
 from PIL import Image
+from fastapi.middleware.cors import CORSMiddleware
 
 # 1. Define the 38 classes
 CLASS_NAMES = [
@@ -71,6 +72,15 @@ async def lifespan(app: FastAPI):
 
 # Initialize FastAPI app
 app = FastAPI(title="Plant Disease Classifier API", lifespan=lifespan)
+
+# Add this CORS middleware block
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # Allows all domains to access your API
+    allow_credentials=True,
+    allow_methods=["*"], # Allows all methods (GET, POST, etc.)
+    allow_headers=["*"], # Allows all headers
+)
 
 @app.post("/predict")
 async def predict_image(file: UploadFile = File(...)):
