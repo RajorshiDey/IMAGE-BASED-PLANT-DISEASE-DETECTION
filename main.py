@@ -82,6 +82,13 @@ app.add_middleware(
     allow_headers=["*"], # Allows all headers
 )
 
+@app.get("/")
+async def health():
+    return {
+        "status" : "success",
+        "message" : "running"
+    }
+
 @app.post("/predict")
 async def predict_image(file: UploadFile = File(...)):
     # Validate that the file is an image
